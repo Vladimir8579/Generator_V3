@@ -8,13 +8,13 @@ using Word = Microsoft.Office.Interop.Word;
 
 namespace Generator_V3
 {
-    public partial class Form1 : Form
+    public partial class Generator : Form
     {
         private string filename = string.Empty;//Путь к файлу Excel
         private string filename2 = string.Empty;//Путь к файлу Word        
         public DataTableCollection tableCollection = null;
 
-        public Form1()
+        public Generator()
         {
             InitializeComponent();
         }
@@ -23,6 +23,7 @@ namespace Generator_V3
         {
             try
             {
+
                 FileStream stream = File.Open(path, FileMode.Open, FileAccess.Read);
                 IExcelDataReader reader = ExcelReaderFactory.CreateReader(stream);
                 DataSet db = reader.AsDataSet(new ExcelDataSetConfiguration
@@ -37,6 +38,7 @@ namespace Generator_V3
                 //
                 try
                 {
+                    toolStripComboBox2.Items.Clear();
                     tableCollection = db.Tables;
                     toolStripComboBox1.Items.Clear();
                     foreach (DataTable tbl in tableCollection)
@@ -55,13 +57,24 @@ namespace Generator_V3
                 //
                 try
                 {
+                    toolStripComboBox2.Items.Clear();
                     tableCollection = db.Tables;
                     toolStripComboBox2.Items.Clear();
-                    foreach (DataTable tbl in tableCollection)
+                    if (db.Tables.Count > 1)
                     {
-                        toolStripComboBox2.Items.Add(tbl.TableName);
+                        foreach (DataTable tbl in tableCollection)
+                        {
+                            toolStripComboBox2.Items.Add(tbl.TableName);
+                        }
+
+                        toolStripComboBox2.SelectedIndex = 1;
                     }
-                    toolStripComboBox2.SelectedIndex = 1;
+                    if (db.Tables.Count < 2)
+                    {
+                        toolStripComboBox2.Items.Clear();
+                        toolStripComboBox2.Items.Add("");
+                        toolStripComboBox2.SelectedIndex = 0;
+                    }
                 }
 
                 catch (Exception ex)
@@ -409,7 +422,7 @@ namespace Generator_V3
                                     ReplaceWith: missing, Replace: replace2);
                             }
                         }
-                    }                   
+                    }
 
                     app.ActiveDocument.AcceptAllRevisions();
                     app.ActiveDocument.SaveAs2(ref fileName);
@@ -426,6 +439,11 @@ namespace Generator_V3
                 app?.ActiveDocument.Close(SaveChanges: 0);
                 app?.Quit(SaveChanges: 0);
             }
+        }
+
+        private void Exit_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
         }
     }
 }
