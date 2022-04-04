@@ -13,11 +13,22 @@ namespace Generator_V3
         private string filename = string.Empty;//Путь к файлу Excel
         private string filename2 = string.Empty;//Путь к файлу Word        
         public DataTableCollection tableCollection = null;
+        
 
         public Generator()
         {
             InitializeComponent();
         }
+
+        void GenerationButtonCheked(object sender, EventArgs e)
+        {
+            if (textBox1SelectWord.Text != "")
+                if(textBoxSelectExcel.Text != "")
+                    if (textBoxSelectPathSave.Text != "")
+                Generation.Enabled = true;
+        }
+
+
 
         private void OpenExcelFile(string path)
         {
@@ -105,9 +116,10 @@ namespace Generator_V3
                     filename2 = openFileDialog2.FileName;
                     textBox1SelectWord.Text = filename2;
                     Word.Application app = new Word.Application();
+                    app.Visible = false;
                     Object missing = Type.Missing;
                     app.Documents.Open(filename2);
-                    app.Visible = false;
+                    
                     //
                     //Получение имени закладки и создание соответствующе именованых чекбоксов
                     //

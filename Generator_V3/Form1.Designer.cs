@@ -70,8 +70,9 @@
             this.textBox1SelectWord.MaximumSize = new System.Drawing.Size(428, 24);
             this.textBox1SelectWord.MinimumSize = new System.Drawing.Size(428, 24);
             this.textBox1SelectWord.Name = "textBox1SelectWord";
-            this.textBox1SelectWord.Size = new System.Drawing.Size(428, 24);
+            this.textBox1SelectWord.Size = new System.Drawing.Size(428, 22);
             this.textBox1SelectWord.TabIndex = 1;
+            this.textBox1SelectWord.TextChanged += new System.EventHandler(this.GenerationButtonCheked);
             // 
             // SelectWord
             // 
@@ -88,7 +89,7 @@
             // 
             // SelectExcel
             // 
-            this.SelectExcel.Location = new System.Drawing.Point(721, 268);
+            this.SelectExcel.Location = new System.Drawing.Point(721, 344);
             this.SelectExcel.Margin = new System.Windows.Forms.Padding(4);
             this.SelectExcel.MaximumSize = new System.Drawing.Size(100, 24);
             this.SelectExcel.MinimumSize = new System.Drawing.Size(100, 24);
@@ -101,13 +102,14 @@
             // 
             // textBoxSelectExcel
             // 
-            this.textBoxSelectExcel.Location = new System.Drawing.Point(273, 269);
+            this.textBoxSelectExcel.Location = new System.Drawing.Point(273, 345);
             this.textBoxSelectExcel.Margin = new System.Windows.Forms.Padding(4);
             this.textBoxSelectExcel.MaximumSize = new System.Drawing.Size(428, 24);
             this.textBoxSelectExcel.MinimumSize = new System.Drawing.Size(428, 24);
             this.textBoxSelectExcel.Name = "textBoxSelectExcel";
             this.textBoxSelectExcel.Size = new System.Drawing.Size(428, 24);
             this.textBoxSelectExcel.TabIndex = 4;
+            this.textBoxSelectExcel.TextChanged += new System.EventHandler(this.GenerationButtonCheked);
             // 
             // label1
             // 
@@ -133,13 +135,14 @@
             this.checkedListBox1.Location = new System.Drawing.Point(273, 68);
             this.checkedListBox1.Margin = new System.Windows.Forms.Padding(4);
             this.checkedListBox1.Name = "checkedListBox1";
-            this.checkedListBox1.Size = new System.Drawing.Size(428, 89);
+            this.checkedListBox1.Size = new System.Drawing.Size(428, 174);
             this.checkedListBox1.TabIndex = 8;
             // 
             // Generation
             // 
+            this.Generation.Enabled = false;
             this.Generation.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.Generation.Location = new System.Drawing.Point(25, 459);
+            this.Generation.Location = new System.Drawing.Point(25, 548);
             this.Generation.Margin = new System.Windows.Forms.Padding(4);
             this.Generation.Name = "Generation";
             this.Generation.Size = new System.Drawing.Size(160, 50);
@@ -155,7 +158,7 @@
             this.checkedListBox2.FormattingEnabled = true;
             this.checkedListBox2.Items.AddRange(new object[] {
             "Выбрать всё"});
-            this.checkedListBox2.Location = new System.Drawing.Point(273, 174);
+            this.checkedListBox2.Location = new System.Drawing.Point(273, 250);
             this.checkedListBox2.Margin = new System.Windows.Forms.Padding(4);
             this.checkedListBox2.Name = "checkedListBox2";
             this.checkedListBox2.Size = new System.Drawing.Size(428, 89);
@@ -167,7 +170,7 @@
             this.label4.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.label4.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.label4.Location = new System.Drawing.Point(25, 174);
+            this.label4.Location = new System.Drawing.Point(25, 250);
             this.label4.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label4.MaximumSize = new System.Drawing.Size(240, 89);
             this.label4.MinimumSize = new System.Drawing.Size(240, 89);
@@ -198,7 +201,7 @@
             this.label3.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.label3.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.label3.Location = new System.Drawing.Point(25, 269);
+            this.label3.Location = new System.Drawing.Point(25, 345);
             this.label3.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label3.MaximumSize = new System.Drawing.Size(240, 24);
             this.label3.MinimumSize = new System.Drawing.Size(240, 24);
@@ -214,7 +217,7 @@
             this.label5.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.label5.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.label5.Location = new System.Drawing.Point(25, 305);
+            this.label5.Location = new System.Drawing.Point(25, 381);
             this.label5.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label5.MaximumSize = new System.Drawing.Size(240, 24);
             this.label5.MinimumSize = new System.Drawing.Size(240, 24);
@@ -230,7 +233,7 @@
             this.label6.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.label6.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.label6.Location = new System.Drawing.Point(25, 339);
+            this.label6.Location = new System.Drawing.Point(25, 415);
             this.label6.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label6.MaximumSize = new System.Drawing.Size(240, 24);
             this.label6.MinimumSize = new System.Drawing.Size(240, 24);
@@ -246,7 +249,7 @@
             this.label7.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.label7.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.label7.Location = new System.Drawing.Point(25, 411);
+            this.label7.Location = new System.Drawing.Point(25, 487);
             this.label7.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label7.MaximumSize = new System.Drawing.Size(240, 24);
             this.label7.MinimumSize = new System.Drawing.Size(240, 24);
@@ -258,7 +261,7 @@
             // 
             // SelectPathSave
             // 
-            this.SelectPathSave.Location = new System.Drawing.Point(721, 411);
+            this.SelectPathSave.Location = new System.Drawing.Point(721, 487);
             this.SelectPathSave.Margin = new System.Windows.Forms.Padding(4);
             this.SelectPathSave.MaximumSize = new System.Drawing.Size(100, 24);
             this.SelectPathSave.MinimumSize = new System.Drawing.Size(100, 24);
@@ -271,13 +274,14 @@
             // 
             // textBoxSelectPathSave
             // 
-            this.textBoxSelectPathSave.Location = new System.Drawing.Point(273, 411);
+            this.textBoxSelectPathSave.Location = new System.Drawing.Point(273, 487);
             this.textBoxSelectPathSave.Margin = new System.Windows.Forms.Padding(4);
             this.textBoxSelectPathSave.MaximumSize = new System.Drawing.Size(428, 24);
             this.textBoxSelectPathSave.MinimumSize = new System.Drawing.Size(428, 24);
             this.textBoxSelectPathSave.Name = "textBoxSelectPathSave";
             this.textBoxSelectPathSave.Size = new System.Drawing.Size(428, 24);
             this.textBoxSelectPathSave.TabIndex = 21;
+            this.textBoxSelectPathSave.TextChanged += new System.EventHandler(this.GenerationButtonCheked);
             // 
             // toolStrip1
             // 
@@ -285,7 +289,7 @@
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripLabel1,
             this.toolStripComboBox1});
-            this.toolStrip1.Location = new System.Drawing.Point(273, 305);
+            this.toolStrip1.Location = new System.Drawing.Point(273, 381);
             this.toolStrip1.MaximumSize = new System.Drawing.Size(428, 24);
             this.toolStrip1.MinimumSize = new System.Drawing.Size(428, 24);
             this.toolStrip1.Name = "toolStrip1";
@@ -297,7 +301,7 @@
             // 
             this.toolStripLabel1.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.toolStripLabel1.Name = "toolStripLabel1";
-            this.toolStripLabel1.Size = new System.Drawing.Size(43, 29);
+            this.toolStripLabel1.Size = new System.Drawing.Size(43, 21);
             this.toolStripLabel1.Text = "Лист";
             // 
             // toolStripComboBox1
@@ -314,7 +318,7 @@
             this.toolStrip2.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripLabel2,
             this.toolStripComboBox2});
-            this.toolStrip2.Location = new System.Drawing.Point(273, 339);
+            this.toolStrip2.Location = new System.Drawing.Point(273, 415);
             this.toolStrip2.MaximumSize = new System.Drawing.Size(428, 24);
             this.toolStrip2.MinimumSize = new System.Drawing.Size(428, 24);
             this.toolStrip2.Name = "toolStrip2";
@@ -326,7 +330,7 @@
             // 
             this.toolStripLabel2.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.toolStripLabel2.Name = "toolStripLabel2";
-            this.toolStripLabel2.Size = new System.Drawing.Size(43, 29);
+            this.toolStripLabel2.Size = new System.Drawing.Size(43, 21);
             this.toolStripLabel2.Text = "Лист";
             // 
             // toolStripComboBox2
@@ -368,7 +372,7 @@
             // comboBox1
             // 
             this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Location = new System.Drawing.Point(273, 372);
+            this.comboBox1.Location = new System.Drawing.Point(273, 448);
             this.comboBox1.MaximumSize = new System.Drawing.Size(428, 0);
             this.comboBox1.MinimumSize = new System.Drawing.Size(428, 0);
             this.comboBox1.Name = "comboBox1";
@@ -381,7 +385,7 @@
             this.label8.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.label8.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.label8.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.label8.Location = new System.Drawing.Point(25, 372);
+            this.label8.Location = new System.Drawing.Point(25, 448);
             this.label8.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label8.MaximumSize = new System.Drawing.Size(240, 24);
             this.label8.MinimumSize = new System.Drawing.Size(240, 24);
@@ -394,7 +398,7 @@
             // Exit
             // 
             this.Exit.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.Exit.Location = new System.Drawing.Point(661, 459);
+            this.Exit.Location = new System.Drawing.Point(661, 548);
             this.Exit.Margin = new System.Windows.Forms.Padding(4);
             this.Exit.Name = "Exit";
             this.Exit.Size = new System.Drawing.Size(160, 50);
@@ -407,7 +411,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(834, 516);
+            this.ClientSize = new System.Drawing.Size(834, 611);
             this.Controls.Add(this.Exit);
             this.Controls.Add(this.label8);
             this.Controls.Add(this.comboBox1);
@@ -434,8 +438,8 @@
             this.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.Margin = new System.Windows.Forms.Padding(4);
             this.MaximizeBox = false;
-            this.MaximumSize = new System.Drawing.Size(850, 555);
-            this.MinimumSize = new System.Drawing.Size(850, 555);
+            this.MaximumSize = new System.Drawing.Size(850, 650);
+            this.MinimumSize = new System.Drawing.Size(850, 650);
             this.Name = "Generator";
             this.Text = "Generator_V3";
             this.toolStrip1.ResumeLayout(false);
