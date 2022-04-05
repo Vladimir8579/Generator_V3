@@ -128,13 +128,13 @@
             this.PanelWord.Controls.Add(this.textBox1SelectWord);
             this.PanelWord.Location = new System.Drawing.Point(8, 3);
             this.PanelWord.Name = "PanelWord";
-            this.PanelWord.Size = new System.Drawing.Size(819, 335);
+            this.PanelWord.Size = new System.Drawing.Size(819, 324);
             this.PanelWord.TabIndex = 35;
             // 
             // dataGridView2
             // 
             this.dataGridView2.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView2.Location = new System.Drawing.Point(707, 118);
+            this.dataGridView2.Location = new System.Drawing.Point(707, 107);
             this.dataGridView2.Name = "dataGridView2";
             this.dataGridView2.Size = new System.Drawing.Size(78, 24);
             this.dataGridView2.TabIndex = 36;
@@ -143,7 +143,7 @@
             // dataGridView1
             // 
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Location = new System.Drawing.Point(707, 53);
+            this.dataGridView1.Location = new System.Drawing.Point(707, 42);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.Size = new System.Drawing.Size(78, 26);
             this.dataGridView1.TabIndex = 35;
@@ -155,7 +155,7 @@
             this.label2.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.label2.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.label2.Location = new System.Drawing.Point(11, 6);
+            this.label2.Location = new System.Drawing.Point(11, 8);
             this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label2.MaximumSize = new System.Drawing.Size(240, 24);
             this.label2.MinimumSize = new System.Drawing.Size(240, 24);
@@ -170,7 +170,7 @@
             this.checkedListBox2.CheckOnClick = true;
             this.checkedListBox2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.checkedListBox2.FormattingEnabled = true;
-            this.checkedListBox2.Location = new System.Drawing.Point(259, 235);
+            this.checkedListBox2.Location = new System.Drawing.Point(259, 222);
             this.checkedListBox2.Margin = new System.Windows.Forms.Padding(4);
             this.checkedListBox2.Name = "checkedListBox2";
             this.checkedListBox2.Size = new System.Drawing.Size(428, 89);
@@ -182,7 +182,7 @@
             this.label4.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.label4.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.label4.Location = new System.Drawing.Point(11, 235);
+            this.label4.Location = new System.Drawing.Point(11, 222);
             this.label4.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label4.MaximumSize = new System.Drawing.Size(240, 89);
             this.label4.MinimumSize = new System.Drawing.Size(240, 89);
@@ -197,7 +197,7 @@
             this.checkedListBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.checkedListBox1.FormattingEnabled = true;
             this.checkedListBox1.HorizontalScrollbar = true;
-            this.checkedListBox1.Location = new System.Drawing.Point(259, 53);
+            this.checkedListBox1.Location = new System.Drawing.Point(259, 40);
             this.checkedListBox1.Margin = new System.Windows.Forms.Padding(4);
             this.checkedListBox1.Name = "checkedListBox1";
             this.checkedListBox1.Size = new System.Drawing.Size(428, 174);
@@ -209,7 +209,7 @@
             this.label1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.label1.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.label1.Location = new System.Drawing.Point(11, 53);
+            this.label1.Location = new System.Drawing.Point(11, 40);
             this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label1.MaximumSize = new System.Drawing.Size(240, 174);
             this.label1.MinimumSize = new System.Drawing.Size(240, 174);
@@ -220,7 +220,7 @@
             // 
             // SelectWord
             // 
-            this.SelectWord.Location = new System.Drawing.Point(707, 6);
+            this.SelectWord.Location = new System.Drawing.Point(707, 8);
             this.SelectWord.Margin = new System.Windows.Forms.Padding(4);
             this.SelectWord.MaximumSize = new System.Drawing.Size(100, 24);
             this.SelectWord.MinimumSize = new System.Drawing.Size(100, 24);
@@ -233,7 +233,7 @@
             // 
             // textBox1SelectWord
             // 
-            this.textBox1SelectWord.Location = new System.Drawing.Point(259, 6);
+            this.textBox1SelectWord.Location = new System.Drawing.Point(259, 8);
             this.textBox1SelectWord.Margin = new System.Windows.Forms.Padding(4);
             this.textBox1SelectWord.MaximumSize = new System.Drawing.Size(428, 24);
             this.textBox1SelectWord.MinimumSize = new System.Drawing.Size(428, 24);
@@ -255,7 +255,7 @@
             this.PanelExcel.Controls.Add(this.toolStrip2);
             this.PanelExcel.Controls.Add(this.toolStrip1);
             this.PanelExcel.Controls.Add(this.label6);
-            this.PanelExcel.Location = new System.Drawing.Point(8, 344);
+            this.PanelExcel.Location = new System.Drawing.Point(8, 338);
             this.PanelExcel.Name = "PanelExcel";
             this.PanelExcel.Size = new System.Drawing.Size(819, 147);
             this.PanelExcel.TabIndex = 36;

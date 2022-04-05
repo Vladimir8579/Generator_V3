@@ -446,8 +446,6 @@ namespace Generator_V3
                         app.ActiveDocument.SaveAs2(ref fileNameEkz2Docx);
                     }
 
-
-
                 }
 
                 MessageBox.Show("Готовые Файлы находятся " + PathFolder);
