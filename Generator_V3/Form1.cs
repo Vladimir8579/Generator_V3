@@ -28,13 +28,10 @@ namespace Generator_V3
                 Generation.Enabled = true;
         }
 
-
-
         private void OpenExcelFile(string path)
         {
             try
             {
-
                 FileStream stream = File.Open(path, FileMode.Open, FileAccess.Read);
                 IExcelDataReader reader = ExcelReaderFactory.CreateReader(stream);
                 DataSet db = reader.AsDataSet(new ExcelDataSetConfiguration
@@ -204,7 +201,6 @@ namespace Generator_V3
                 if (res == DialogResult.OK)
                 {
                     filename = openFileDialog1.FileName;
-
                     Text = filename;
                     textBoxSelectExcel.Text = filename.ToString();
                     OpenExcelFile(filename);
@@ -327,7 +323,12 @@ namespace Generator_V3
                     //
                     //Задаём имя новому файлу
                     //
-                    object fileName = textBoxSelectPathSave.Text + "\\" + dataGridView1.Rows[m].Cells[IndexSelect].Value.ToString() + ".docx";
+                    object fileNameEkz1Docx = textBoxSelectPathSave.Text + "\\" + "Экз №1 " + dataGridView1.Rows[m].Cells[IndexSelect].Value.ToString() + ".docx";
+                    object fileNameEkz2Docx = textBoxSelectPathSave.Text + "\\" + "Экз №2 " + dataGridView1.Rows[m].Cells[IndexSelect].Value.ToString() + ".docx";
+
+                    object fileNameEkz1Pdf = textBoxSelectPathSave.Text + "\\" + "Экз №1 " + dataGridView1.Rows[m].Cells[IndexSelect].Value.ToString() + ".pdf";
+                    object fileNameEkz2Pdf = textBoxSelectPathSave.Text + "\\" + "Экз №2 " + dataGridView1.Rows[m].Cells[IndexSelect].Value.ToString() + ".pdf";
+
                     object oMissing = System.Reflection.Missing.Value;
                     object oEndOfDoc = "\\endofdoc"; /* \endofdoc это предопределенная закладка */
                     //
@@ -345,7 +346,6 @@ namespace Generator_V3
                             app.ActiveDocument.Bookmarks[BookmarkName].Range.Delete();
                         }
                     }
-
 
                     int NumberCheckTable = checkedListBox2.Items.Count;
                     for (int i = 0; i < NumberCheckTable; i++)
@@ -435,9 +435,19 @@ namespace Generator_V3
                             }
                         }
                     }
-
+                    object fileformat = Word.WdSaveFormat.wdFormatPDF;
                     app.ActiveDocument.AcceptAllRevisions();
-                    app.ActiveDocument.SaveAs2(ref fileName);
+
+                    if (((int)numericUpDown1.Value == 1) == true)
+                        app.ActiveDocument.SaveAs2(ref fileNameEkz1Docx);
+                    if (((int)numericUpDown1.Value == 2) == true)
+                    {
+                        app.ActiveDocument.SaveAs2(ref fileNameEkz1Docx);
+                        app.ActiveDocument.SaveAs2(ref fileNameEkz2Docx);
+                    }
+
+
+
                 }
 
                 MessageBox.Show("Готовые Файлы находятся " + PathFolder);
@@ -456,6 +466,11 @@ namespace Generator_V3
         private void Exit_Click(object sender, EventArgs e)
         {
             Application.Exit();
+        }
+
+        private void toolTip1_Popup(object sender, PopupEventArgs e)
+        {
+
         }
     }
 }
