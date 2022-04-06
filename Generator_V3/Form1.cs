@@ -438,12 +438,38 @@ namespace Generator_V3
                     object fileformat = Word.WdSaveFormat.wdFormatPDF;
                     app.ActiveDocument.AcceptAllRevisions();
 
-                    if (((int)numericUpDown1.Value == 1) == true)
-                        app.ActiveDocument.SaveAs2(ref fileNameEkz1Docx);
-                    if (((int)numericUpDown1.Value == 2) == true)
+                    //switch (checkBox1.CheckState)
+                    //{
+                    //    case CheckState.Checked:
+                    //        // Code for checked state.  
+                    //        break;
+                    //    case CheckState.Unchecked:
+                    //        // Code for unchecked state.  
+                    //        break;
+                    //    case CheckState.Indeterminate:
+                    //        // Code for indeterminate state.  
+                    //        break;
+                    //}
+                    
+                        if (((int)numericUpDown1.Value == 1) == true)
+                            app.ActiveDocument.SaveAs2(ref fileNameEkz1Docx);
+                        if (((int)numericUpDown1.Value == 2) == true)
+                        {
+                            app.ActiveDocument.SaveAs2(ref fileNameEkz1Docx);
+                            app.ActiveDocument.SaveAs2(ref fileNameEkz2Docx);
+                        }
+                    
+                    
+                    if (CheckBoxSaveToPdf.Checked)
                     {
-                        app.ActiveDocument.SaveAs2(ref fileNameEkz1Docx);
-                        app.ActiveDocument.SaveAs2(ref fileNameEkz2Docx);
+                        if (((int)numericUpDown1.Value == 1) == true)
+                            app.ActiveDocument.SaveAs2(ref fileNameEkz1Pdf, fileformat);
+                        if (((int)numericUpDown1.Value == 2) == true)
+                        {
+                            app.ActiveDocument.SaveAs2(ref fileNameEkz1Pdf, fileformat);
+                            app.ActiveDocument.SaveAs2(ref fileNameEkz2Pdf, fileformat);
+                        }
+
                     }
 
                 }
@@ -456,8 +482,8 @@ namespace Generator_V3
             }
             finally
             {
-                app?.ActiveDocument.Close(SaveChanges: 0);
-                app?.Quit(SaveChanges: 0);
+                //app?.ActiveDocument.Close(SaveChanges: 0);
+                //app?.Quit(SaveChanges: 0);
             }
         }
 

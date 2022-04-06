@@ -49,7 +49,6 @@
             this.label3 = new System.Windows.Forms.Label();
             this.SelectExcel = new System.Windows.Forms.Button();
             this.textBoxSelectExcel = new System.Windows.Forms.TextBox();
-            this.toolStripComboBox1 = new System.Windows.Forms.ToolStripComboBox();
             this.label8 = new System.Windows.Forms.Label();
             this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.toolStrip2 = new System.Windows.Forms.ToolStrip();
@@ -57,14 +56,16 @@
             this.toolStripComboBox2 = new System.Windows.Forms.ToolStripComboBox();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.toolStripLabel1 = new System.Windows.Forms.ToolStripLabel();
+            this.toolStripComboBox1 = new System.Windows.Forms.ToolStripComboBox();
             this.label6 = new System.Windows.Forms.Label();
             this.PanelPatchSave = new System.Windows.Forms.Panel();
+            this.label10 = new System.Windows.Forms.Label();
             this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
             this.label9 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             this.SelectPathSave = new System.Windows.Forms.Button();
             this.textBoxSelectPathSave = new System.Windows.Forms.TextBox();
-            this.label10 = new System.Windows.Forms.Label();
+            this.CheckBoxSaveToPdf = new System.Windows.Forms.CheckBox();
             this.PanelWord.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
@@ -238,7 +239,7 @@
             this.textBox1SelectWord.MaximumSize = new System.Drawing.Size(428, 24);
             this.textBox1SelectWord.MinimumSize = new System.Drawing.Size(428, 24);
             this.textBox1SelectWord.Name = "textBox1SelectWord";
-            this.textBox1SelectWord.Size = new System.Drawing.Size(428, 24);
+            this.textBox1SelectWord.Size = new System.Drawing.Size(428, 22);
             this.textBox1SelectWord.TabIndex = 28;
             this.textBox1SelectWord.TextChanged += new System.EventHandler(this.GenerationButtonCheked);
             this.textBox1SelectWord.DoubleClick += new System.EventHandler(this.SelectWord_Click);
@@ -312,18 +313,10 @@
             this.textBoxSelectExcel.MaximumSize = new System.Drawing.Size(428, 24);
             this.textBoxSelectExcel.MinimumSize = new System.Drawing.Size(428, 24);
             this.textBoxSelectExcel.Name = "textBoxSelectExcel";
-            this.textBoxSelectExcel.Size = new System.Drawing.Size(428, 24);
+            this.textBoxSelectExcel.Size = new System.Drawing.Size(428, 22);
             this.textBoxSelectExcel.TabIndex = 30;
             this.textBoxSelectExcel.TextChanged += new System.EventHandler(this.GenerationButtonCheked);
             this.textBoxSelectExcel.DoubleClick += new System.EventHandler(this.SelectExcel_Click);
-            // 
-            // toolStripComboBox1
-            // 
-            this.toolStripComboBox1.AutoSize = false;
-            this.toolStripComboBox1.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.toolStripComboBox1.Name = "toolStripComboBox1";
-            this.toolStripComboBox1.Size = new System.Drawing.Size(345, 27);
-            this.toolStripComboBox1.SelectedIndexChanged += new System.EventHandler(this.ToolStripComboBox1_SelectedIndexChanged);
             // 
             // label8
             // 
@@ -401,6 +394,14 @@
             this.toolStripLabel1.Size = new System.Drawing.Size(43, 21);
             this.toolStripLabel1.Text = "Лист";
             // 
+            // toolStripComboBox1
+            // 
+            this.toolStripComboBox1.AutoSize = false;
+            this.toolStripComboBox1.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.toolStripComboBox1.Name = "toolStripComboBox1";
+            this.toolStripComboBox1.Size = new System.Drawing.Size(345, 27);
+            this.toolStripComboBox1.SelectedIndexChanged += new System.EventHandler(this.ToolStripComboBox1_SelectedIndexChanged);
+            // 
             // label6
             // 
             this.label6.AutoSize = true;
@@ -420,6 +421,7 @@
             // PanelPatchSave
             // 
             this.PanelPatchSave.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.PanelPatchSave.Controls.Add(this.CheckBoxSaveToPdf);
             this.PanelPatchSave.Controls.Add(this.label10);
             this.PanelPatchSave.Controls.Add(this.numericUpDown1);
             this.PanelPatchSave.Controls.Add(this.label9);
@@ -430,6 +432,23 @@
             this.PanelPatchSave.Name = "PanelPatchSave";
             this.PanelPatchSave.Size = new System.Drawing.Size(819, 123);
             this.PanelPatchSave.TabIndex = 37;
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.label10.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label10.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.label10.Location = new System.Drawing.Point(11, 84);
+            this.label10.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label10.MaximumSize = new System.Drawing.Size(240, 24);
+            this.label10.MinimumSize = new System.Drawing.Size(240, 24);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(240, 24);
+            this.label10.TabIndex = 40;
+            this.label10.Text = "Сохранить в PDF";
+            this.label10.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.label10.Visible = false;
             // 
             // numericUpDown1
             // 
@@ -510,22 +529,19 @@
             this.textBoxSelectPathSave.TextChanged += new System.EventHandler(this.GenerationButtonCheked);
             this.textBoxSelectPathSave.DoubleClick += new System.EventHandler(this.SelectPathSave_Click);
             // 
-            // label10
+            // CheckBoxSaveToPdf
             // 
-            this.label10.AutoSize = true;
-            this.label10.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.label10.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label10.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.label10.Location = new System.Drawing.Point(11, 84);
-            this.label10.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label10.MaximumSize = new System.Drawing.Size(240, 24);
-            this.label10.MinimumSize = new System.Drawing.Size(240, 24);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(240, 24);
-            this.label10.TabIndex = 40;
-            this.label10.Text = "Сохранить в PDF";
-            this.label10.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.label10.Visible = false;
+            this.CheckBoxSaveToPdf.AutoSize = true;
+            this.CheckBoxSaveToPdf.Checked = true;
+            this.CheckBoxSaveToPdf.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.CheckBoxSaveToPdf.Location = new System.Drawing.Point(259, 84);
+            this.CheckBoxSaveToPdf.MaximumSize = new System.Drawing.Size(136, 24);
+            this.CheckBoxSaveToPdf.MinimumSize = new System.Drawing.Size(136, 24);
+            this.CheckBoxSaveToPdf.Name = "CheckBoxSaveToPdf";
+            this.CheckBoxSaveToPdf.Size = new System.Drawing.Size(136, 24);
+            this.CheckBoxSaveToPdf.TabIndex = 41;
+            this.CheckBoxSaveToPdf.Text = "Сохранить в PDF";
+            this.CheckBoxSaveToPdf.UseVisualStyleBackColor = true;
             // 
             // Generator
             // 
@@ -596,6 +612,7 @@
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Button SelectPathSave;
         private System.Windows.Forms.TextBox textBoxSelectPathSave;
+        private System.Windows.Forms.CheckBox CheckBoxSaveToPdf;
     }
 }
 
