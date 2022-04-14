@@ -20,15 +20,15 @@ namespace Generator_V3
             InitializeComponent();
         }
 
-        void GenerationButtonCheked(object sender, EventArgs e)
+        void GenerationButtonCheked(object sender, EventArgs e)//Включение кнопки Генерация если 3 поля заполнены
         {
             if (textBox1SelectWord.Text != "")
-                if(textBoxSelectExcel.Text != "")
+                if (textBoxSelectExcel.Text != "")
                     if (textBoxSelectPathSave.Text != "")
-                Generation.Enabled = true;
+                        Generation.Enabled = true;
         }
 
-        private void OpenExcelFile(string path)
+        private void OpenExcelFile(string path)//Чтение файла Excel 
         {
             try
             {
@@ -103,7 +103,7 @@ namespace Generator_V3
             }
         }
 
-        private void SelectWord_Click(object sender, EventArgs e)
+        private void SelectWord_Click(object sender, EventArgs e)//Выбрать и прочитать шаблон Word
         {
             try
             {
@@ -112,11 +112,13 @@ namespace Generator_V3
                 {
                     filename2 = openFileDialog2.FileName;
                     textBox1SelectWord.Text = filename2;
-                    Word.Application app = new Word.Application();
-                    app.Visible = false;
+                    Word.Application app = new Word.Application
+                    {
+                        Visible = false
+                    };
                     Object missing = Type.Missing;
                     app.Documents.Open(filename2);
-                    
+
                     //
                     //Получение имени закладки и создание соответствующе именованых чекбоксов
                     //
@@ -193,7 +195,7 @@ namespace Generator_V3
             }
         }
 
-        private void SelectExcel_Click(object sender, EventArgs e)
+        private void SelectExcel_Click(object sender, EventArgs e)//Открыть файл Excel 
         {
             try
             {
@@ -217,14 +219,13 @@ namespace Generator_V3
             }
         }
 
-        private void ToolStripComboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        private void ToolStripComboBox1_SelectedIndexChanged(object sender, EventArgs e)// Обработка значений из 1-го листа Exсel
         {
             try
             {
                 DataTable tbl = tableCollection[Convert.ToString(toolStripComboBox1.SelectedItem)];
 
                 dataGridView1.DataSource = tbl;
-
 
                 int NumberOfColumn = dataGridView1.Columns.GetColumnCount(0);
                 comboBox1.Items.Clear();
@@ -243,7 +244,7 @@ namespace Generator_V3
             }
         }
 
-        private void ToolStripComboBox2_SelectedIndexChanged(object sender, EventArgs e)
+        private void ToolStripComboBox2_SelectedIndexChanged(object sender, EventArgs e)// Обработка значений из 2-го листа Exсel
         {
             try
             {
@@ -257,7 +258,7 @@ namespace Generator_V3
             }
         }
 
-        private void SelectPathSave_Click(object sender, EventArgs e)
+        private void SelectPathSave_Click(object sender, EventArgs e)// Обработка выбора пути сохранения готовых файлов
         {
             try
             {
@@ -281,9 +282,8 @@ namespace Generator_V3
             }
         }
 
-        private void Generation_Click(object sender, EventArgs e)
+        private void Generation_Click(object sender, EventArgs e)// Генерация актов
         {
-            //
             //Получение количества столбцов и строк для внесение имен переменных
             //и использовании индексов в дальнейшем
             //
@@ -297,6 +297,13 @@ namespace Generator_V3
 
             //Переменная содержит путь куда складывать готовые файлы
             string PathFolder = textBoxSelectPathSave.Text;
+
+            //Создаём новую папку и помещаем всё файлы в эту папку
+            string path = textBoxSelectPathSave.Text + "\\" + "Новая папка проекта";            
+            if (!Directory.Exists(path))
+            {
+                Directory.CreateDirectory(path);
+            }
 
             try
             {
@@ -319,15 +326,14 @@ namespace Generator_V3
                     {
                         list2.Add(dataGridView2.Columns[i].HeaderText.ToString());
                     }
-
                     //
                     //Задаём имя новому файлу
                     //
-                    object fileNameEkz1Docx = textBoxSelectPathSave.Text + "\\" + "Экз №1 " + dataGridView1.Rows[m].Cells[IndexSelect].Value.ToString() + ".docx";
-                    object fileNameEkz2Docx = textBoxSelectPathSave.Text + "\\" + "Экз №2 " + dataGridView1.Rows[m].Cells[IndexSelect].Value.ToString() + ".docx";
+                    object fileNameEkz1Docx = path + "\\" + "Экз №1 " + dataGridView1.Rows[m].Cells[IndexSelect].Value.ToString() + ".docx";
+                    object fileNameEkz2Docx = path + "\\" + "Экз №2 " + dataGridView1.Rows[m].Cells[IndexSelect].Value.ToString() + ".docx";
 
-                    object fileNameEkz1Pdf = textBoxSelectPathSave.Text + "\\" + "Экз №1 " + dataGridView1.Rows[m].Cells[IndexSelect].Value.ToString() + ".pdf";
-                    object fileNameEkz2Pdf = textBoxSelectPathSave.Text + "\\" + "Экз №2 " + dataGridView1.Rows[m].Cells[IndexSelect].Value.ToString() + ".pdf";
+                    object fileNameEkz1Pdf = path + "\\" + "Экз №1 " + dataGridView1.Rows[m].Cells[IndexSelect].Value.ToString() + ".pdf";
+                    object fileNameEkz2Pdf = path + "\\" + "Экз №2 " + dataGridView1.Rows[m].Cells[IndexSelect].Value.ToString() + ".pdf";
 
                     object oMissing = System.Reflection.Missing.Value;
                     object oEndOfDoc = "\\endofdoc"; /* \endofdoc это предопределенная закладка */
@@ -347,22 +353,38 @@ namespace Generator_V3
                         }
                     }
 
+                    //
+                    //Получаем номер таблицы отмеченную в checkedListBox2,
+                    //которую нужно почистить от пустых строк и прроверяем построчно ячейки 2, 3, 4
+                    // если три ячейки подряд в строке пустые удаляем строку
+                    //
                     int NumberCheckTable = checkedListBox2.Items.Count;
+
                     for (int i = 0; i < NumberCheckTable; i++)
                     {
                         if (checkedListBox2.GetItemChecked(i) == true)
                         {
-                            Word.Table tbl1 = app.ActiveDocument.Tables[1];
+                            Word.Table tbl1 = app.ActiveDocument.Tables[i + 1];
                             int NumberRowsTable = tbl1.Rows.Count;
+
                             for (int z = NumberRowsTable; z > 0; z--)
                             {
-                                if (string.IsNullOrEmpty(tbl1.Rows[z].Cells[2].Range.Text.Replace("\r\a", "").Trim()) == true)
+                                int NumberCellTable = tbl1.Rows[z].Cells.Count;
+
+                                if ((NumberCellTable > 4) == true)
                                 {
-                                    if (string.IsNullOrEmpty(tbl1.Rows[z].Cells[3].Range.Text.Replace("\r\a", "").Trim()) == true)
+
+                                    if (string.IsNullOrEmpty(tbl1.Rows[z].Cells[2].Range.Text.Replace("\r\a", "").Trim()) == true)
                                     {
-                                        if (string.IsNullOrEmpty(tbl1.Rows[z].Cells[4].Range.Text.Replace("\r\a", "").Trim()) == true)
+
+                                        if (string.IsNullOrEmpty(tbl1.Rows[z].Cells[3].Range.Text.Replace("\r\a", "").Trim()) == true)
                                         {
-                                            tbl1.Rows[z].Delete();
+
+                                            if (string.IsNullOrEmpty(tbl1.Rows[z].Cells[4].Range.Text.Replace("\r\a", "").Trim()) == true)
+                                            {
+                                                tbl1.Rows[z].Delete();
+                                            }
+
                                         }
 
                                     }
@@ -370,10 +392,15 @@ namespace Generator_V3
                                 }
 
                             }
+
                         }
+
                     }
                     //
                     //Срост данных таблицы и шаблона документа Word
+                    //
+                    //
+                    //Блок 1 поиск и замена одиночных переменных
                     //
                     {
                         for (int index = 0; index < NumberOfColumnsDGV1; index++)
@@ -398,6 +425,9 @@ namespace Generator_V3
                         }
                     }
 
+                    //
+                    //Блок 2 Поиск и замена списочных переменных
+                    //
                     {
                         for (int index = 0; index < NumberOfColumnsDGV2; index++)
                         {
@@ -435,31 +465,26 @@ namespace Generator_V3
                             }
                         }
                     }
+                    //
+                    //Сохранение в выбранном формате
+                    //
+                    object Mirror = app.ActiveDocument.PageSetup.MirrorMargins;
+                    if (app.ActiveDocument.Comments.Count > 0)
+                    {
+                        app.Application.ActiveDocument.DeleteAllComments();
+                    }                    
+
                     object fileformat = Word.WdSaveFormat.wdFormatPDF;
                     app.ActiveDocument.AcceptAllRevisions();
+                    
+                    if (((int)numericUpDown1.Value == 1) == true)
+                        app.ActiveDocument.SaveAs2(ref fileNameEkz1Docx);
+                    if (((int)numericUpDown1.Value == 2) == true)
+                    {
+                        app.ActiveDocument.SaveAs2(ref fileNameEkz1Docx);
+                        app.ActiveDocument.SaveAs2(ref fileNameEkz2Docx);
+                    }
 
-                    //switch (checkBox1.CheckState)
-                    //{
-                    //    case CheckState.Checked:
-                    //        // Code for checked state.  
-                    //        break;
-                    //    case CheckState.Unchecked:
-                    //        // Code for unchecked state.  
-                    //        break;
-                    //    case CheckState.Indeterminate:
-                    //        // Code for indeterminate state.  
-                    //        break;
-                    //}
-                    
-                        if (((int)numericUpDown1.Value == 1) == true)
-                            app.ActiveDocument.SaveAs2(ref fileNameEkz1Docx);
-                        if (((int)numericUpDown1.Value == 2) == true)
-                        {
-                            app.ActiveDocument.SaveAs2(ref fileNameEkz1Docx);
-                            app.ActiveDocument.SaveAs2(ref fileNameEkz2Docx);
-                        }
-                    
-                    
                     if (CheckBoxSaveToPdf.Checked)
                     {
                         if (((int)numericUpDown1.Value == 1) == true)
@@ -482,19 +507,15 @@ namespace Generator_V3
             }
             finally
             {
-                //app?.ActiveDocument.Close(SaveChanges: 0);
-                //app?.Quit(SaveChanges: 0);
+                app?.ActiveDocument.Close(SaveChanges: 0);
+                app?.Quit(SaveChanges: 0);
             }
         }
 
-        private void Exit_Click(object sender, EventArgs e)
+        private void Exit_Click(object sender, EventArgs e)// Завершение работы приложения
         {
             Application.Exit();
         }
 
-        private void toolTip1_Popup(object sender, PopupEventArgs e)
-        {
-
-        }
     }
 }

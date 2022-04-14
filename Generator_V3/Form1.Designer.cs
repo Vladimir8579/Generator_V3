@@ -59,13 +59,13 @@
             this.toolStripComboBox1 = new System.Windows.Forms.ToolStripComboBox();
             this.label6 = new System.Windows.Forms.Label();
             this.PanelPatchSave = new System.Windows.Forms.Panel();
+            this.CheckBoxSaveToPdf = new System.Windows.Forms.CheckBox();
             this.label10 = new System.Windows.Forms.Label();
             this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
             this.label9 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             this.SelectPathSave = new System.Windows.Forms.Button();
             this.textBoxSelectPathSave = new System.Windows.Forms.TextBox();
-            this.CheckBoxSaveToPdf = new System.Windows.Forms.CheckBox();
             this.PanelWord.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
@@ -110,10 +110,6 @@
             this.Exit.Text = "Выход";
             this.Exit.UseVisualStyleBackColor = true;
             this.Exit.Click += new System.EventHandler(this.Exit_Click);
-            // 
-            // toolTip1
-            // 
-            this.toolTip1.Popup += new System.Windows.Forms.PopupEventHandler(this.toolTip1_Popup);
             // 
             // PanelWord
             // 
@@ -433,6 +429,18 @@
             this.PanelPatchSave.Size = new System.Drawing.Size(819, 123);
             this.PanelPatchSave.TabIndex = 37;
             // 
+            // CheckBoxSaveToPdf
+            // 
+            this.CheckBoxSaveToPdf.AutoSize = true;
+            this.CheckBoxSaveToPdf.Location = new System.Drawing.Point(259, 84);
+            this.CheckBoxSaveToPdf.MaximumSize = new System.Drawing.Size(260, 24);
+            this.CheckBoxSaveToPdf.MinimumSize = new System.Drawing.Size(260, 24);
+            this.CheckBoxSaveToPdf.Name = "CheckBoxSaveToPdf";
+            this.CheckBoxSaveToPdf.Size = new System.Drawing.Size(260, 24);
+            this.CheckBoxSaveToPdf.TabIndex = 41;
+            this.CheckBoxSaveToPdf.Text = "Дополнительно сохранить в PDF";
+            this.CheckBoxSaveToPdf.UseVisualStyleBackColor = true;
+            // 
             // label10
             // 
             this.label10.AutoSize = true;
@@ -524,24 +532,10 @@
             this.textBoxSelectPathSave.MaximumSize = new System.Drawing.Size(428, 24);
             this.textBoxSelectPathSave.MinimumSize = new System.Drawing.Size(428, 24);
             this.textBoxSelectPathSave.Name = "textBoxSelectPathSave";
-            this.textBoxSelectPathSave.Size = new System.Drawing.Size(428, 24);
+            this.textBoxSelectPathSave.Size = new System.Drawing.Size(428, 22);
             this.textBoxSelectPathSave.TabIndex = 35;
             this.textBoxSelectPathSave.TextChanged += new System.EventHandler(this.GenerationButtonCheked);
             this.textBoxSelectPathSave.DoubleClick += new System.EventHandler(this.SelectPathSave_Click);
-            // 
-            // CheckBoxSaveToPdf
-            // 
-            this.CheckBoxSaveToPdf.AutoSize = true;
-            this.CheckBoxSaveToPdf.Checked = true;
-            this.CheckBoxSaveToPdf.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.CheckBoxSaveToPdf.Location = new System.Drawing.Point(259, 84);
-            this.CheckBoxSaveToPdf.MaximumSize = new System.Drawing.Size(136, 24);
-            this.CheckBoxSaveToPdf.MinimumSize = new System.Drawing.Size(136, 24);
-            this.CheckBoxSaveToPdf.Name = "CheckBoxSaveToPdf";
-            this.CheckBoxSaveToPdf.Size = new System.Drawing.Size(136, 24);
-            this.CheckBoxSaveToPdf.TabIndex = 41;
-            this.CheckBoxSaveToPdf.Text = "Сохранить в PDF";
-            this.CheckBoxSaveToPdf.UseVisualStyleBackColor = true;
             // 
             // Generator
             // 
