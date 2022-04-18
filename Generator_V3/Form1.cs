@@ -13,7 +13,6 @@ namespace Generator_V3
         private string filename = string.Empty;//Путь к файлу Excel
         private string filename2 = string.Empty;//Путь к файлу Word        
         public DataTableCollection tableCollection = null;
-        
 
         public Generator()
         {
@@ -150,20 +149,21 @@ namespace Generator_V3
                             string FooterText = (footer.Range == null || footer.Range.Text.Replace("\r", "").Trim() == null) ? null : footer.Range.Text.Replace("\r", "").Trim();
                             if (FooterText != null)
                             {
-                                //if (FooterText != "")
-                                //{
-                                //    checkedListBox2.Items.Add(FooterText);
-                                //}
-
-                                //string proba = (FooterText.Substring(FooterText.IndexOf("{")));
-                                //checkedListBox2.Items.Add(proba);
+                                if (FooterText != "")
+                                {
+                                    checkedListBox2.Items.Add(FooterText);
+                                    string proba = (FooterText.Substring(FooterText.IndexOf("{")));
+                                    checkedListBox2.Items.Add(proba);
+                                }
 
                                 /* Обработка текста */
                             }
                             //checkedListBox2.Items.Add(FooterText);
                         }
-                        ArrayList HeaderList = new ArrayList();
+
                         // Верхние колонтитулы
+                        ArrayList HeaderList = new ArrayList();
+
                         foreach (Word.HeaderFooter header in section.Headers)
                         {
                             string HeaderText = (header.Range == null || header.Range.Text.Replace("\r", "").Trim() == null) ? null : header.Range.Text.Replace("\r", "").Trim();
@@ -299,7 +299,7 @@ namespace Generator_V3
             string PathFolder = textBoxSelectPathSave.Text;
 
             //Создаём новую папку и помещаем всё файлы в эту папку
-            string path = textBoxSelectPathSave.Text + "\\" + "Новая папка проекта";            
+            string path = textBoxSelectPathSave.Text + "\\" + "Новая папка проекта";
             if (!Directory.Exists(path))
             {
                 Directory.CreateDirectory(path);
@@ -343,6 +343,10 @@ namespace Generator_V3
                     string fileName2 = textBox1SelectWord.Text;
                     Object missing = Type.Missing;
                     app.Documents.Open(fileName2);
+
+                    //
+                    //Удаление не отмеченных закладок
+                    //
 
                     for (int i = 0; i < checkedListBox1.Items.Count; i++)
                     {
@@ -396,6 +400,27 @@ namespace Generator_V3
                         }
 
                     }
+
+                    //
+                    //Колонтикулы
+                    //
+                    object replace5 = 2;
+                    object tm = Type.Missing;
+                    //object WH = Word.WdHeaderFooterIndex;
+                    string strReplaceWithText = "Экз №1";
+                    object findText = "Экз"; // что меняем
+                    object replaceWith = strReplaceWithText; // на что меняем
+
+                    app.ActiveDocument.Sections[1].Headers[Word.WdHeaderFooterIndex.wdHeaderFooterPrimary].Range.Find.Execute(ref findText,
+                        ref tm, ref tm, ref tm, ref tm, ref tm, ref tm, ref tm, ref tm, ref replaceWith,
+                        ref replace5, ref tm, ref tm, ref tm, ref tm);
+                    app.ActiveDocument.Sections[1].Headers[Word.WdHeaderFooterIndex.wdHeaderFooterFirstPage].Range.Find.Execute(ref findText,
+                        ref tm, ref tm, ref tm, ref tm, ref tm, ref tm, ref tm,ref tm, ref replaceWith,
+                        ref replace5, ref tm, ref tm, ref tm, ref tm);                
+
+                    
+
+                    //app.ActiveDocument.Sections[1].Headers[Word.WdHeaderFooterIndex.wdHeaderFooterPrimary].Range.Text = strReplaceWithText;
                     //
                     //Срост данных таблицы и шаблона документа Word
                     //
@@ -415,13 +440,22 @@ namespace Generator_V3
                                 MatchCase: false,
                                 MatchWholeWord: false,
                                 MatchWildcards: false,
-
                                 MatchSoundsLike: missing,
                                 MatchAllWordForms: false,
                                 Forward: true,
                                 Wrap: wrap,
                                 Format: false,
                                 ReplaceWith: missing, Replace: replace);
+
+                            object findText2 = "{$" + (string)list[index] + "$}"; // что меняем
+                            object replaceWith2 = dataGridView1.Rows[m].Cells[(string)list[index]].Value.ToString(); // на что меняем
+
+                            app.ActiveDocument.Sections[1].Footers[Word.WdHeaderFooterIndex.wdHeaderFooterPrimary].Range.Find.Execute(ref findText2,
+                                ref tm, ref tm, ref tm, ref tm, ref tm, ref tm, ref tm, ref tm, ref replaceWith2,
+                                ref replace5, ref tm, ref tm, ref tm, ref tm);
+                            app.ActiveDocument.Sections[1].Footers[Word.WdHeaderFooterIndex.wdHeaderFooterFirstPage].Range.Find.Execute(ref findText2,
+                                ref tm, ref tm, ref tm, ref tm, ref tm, ref tm, ref tm, ref tm, ref replaceWith2,
+                                ref replace5, ref tm, ref tm, ref tm, ref tm);
                         }
                     }
 
@@ -465,18 +499,18 @@ namespace Generator_V3
                             }
                         }
                     }
-                    //
-                    //Сохранение в выбранном формате
-                    //
+
                     object Mirror = app.ActiveDocument.PageSetup.MirrorMargins;
                     if (app.ActiveDocument.Comments.Count > 0)
                     {
                         app.Application.ActiveDocument.DeleteAllComments();
-                    }                    
-
+                    }
+                    //
+                    //Сохранение в выбранном формате
+                    //
                     object fileformat = Word.WdSaveFormat.wdFormatPDF;
                     app.ActiveDocument.AcceptAllRevisions();
-                    
+
                     if (((int)numericUpDown1.Value == 1) == true)
                         app.ActiveDocument.SaveAs2(ref fileNameEkz1Docx);
                     if (((int)numericUpDown1.Value == 2) == true)
