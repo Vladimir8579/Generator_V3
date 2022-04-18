@@ -141,44 +141,44 @@ namespace Generator_V3
                     }
 
                     // Получение текста из нижних и верхних колонтитулов
-                    foreach (Word.Section section in app.ActiveDocument.Sections)
-                    {
-                        // Нижние колонтитулы
-                        foreach (Word.HeaderFooter footer in section.Footers)
-                        {
-                            string FooterText = (footer.Range == null || footer.Range.Text.Replace("\r", "").Trim() == null) ? null : footer.Range.Text.Replace("\r", "").Trim();
-                            if (FooterText != null)
-                            {
-                                if (FooterText != "")
-                                {
-                                    checkedListBox2.Items.Add(FooterText);
-                                    string proba = (FooterText.Substring(FooterText.IndexOf("{")));
-                                    checkedListBox2.Items.Add(proba);
-                                }
+                    //foreach (Word.Section section in app.ActiveDocument.Sections)
+                    //{
+                    //    // Нижние колонтитулы
+                    //    foreach (Word.HeaderFooter footer in section.Footers)
+                    //    {
+                    //        string FooterText = (footer.Range == null || footer.Range.Text.Replace("\r", "").Trim() == null) ? null : footer.Range.Text.Replace("\r", "").Trim();
+                    //        if (FooterText != null)
+                    //        {
+                    //            if (FooterText != "")
+                    //            {
+                    //                checkedListBox2.Items.Add(FooterText);
+                    //                string proba = (FooterText.Substring(FooterText.IndexOf("{")));
+                    //                checkedListBox2.Items.Add(proba);
+                    //            }
 
-                                /* Обработка текста */
-                            }
-                            //checkedListBox2.Items.Add(FooterText);
-                        }
+                    //            /* Обработка текста */
+                    //        }
+                    //        //checkedListBox2.Items.Add(FooterText);
+                    //    }
 
-                        // Верхние колонтитулы
-                        ArrayList HeaderList = new ArrayList();
+                    //    // Верхние колонтитулы
+                    //    ArrayList HeaderList = new ArrayList();
 
-                        foreach (Word.HeaderFooter header in section.Headers)
-                        {
-                            string HeaderText = (header.Range == null || header.Range.Text.Replace("\r", "").Trim() == null) ? null : header.Range.Text.Replace("\r", "").Trim();
-                            if (HeaderText != null)
-                            {
-                                //if (HeaderText != "")
-                                //{
-                                //    checkedListBox2.Items.Add(HeaderText);
-                                //}
-                                //string proba = (HeaderText.Substring(HeaderText.IndexOf("$"), HeaderText.IndexOf("$")));                             
+                    //    foreach (Word.HeaderFooter header in section.Headers)
+                    //    {
+                    //        string HeaderText = (header.Range == null || header.Range.Text.Replace("\r", "").Trim() == null) ? null : header.Range.Text.Replace("\r", "").Trim();
+                    //        if (HeaderText != null)
+                    //        {
+                    //            //if (HeaderText != "")
+                    //            //{
+                    //            //    checkedListBox2.Items.Add(HeaderText);
+                    //            //}
+                    //            //string proba = (HeaderText.Substring(HeaderText.IndexOf("$"), HeaderText.IndexOf("$")));                             
 
-                                /* Обработка текста */
-                            }
-                        }
-                    }
+                    //            /* Обработка текста */
+                    //        }
+                    //    }
+                    //}
                     app.Documents.Close();
                     app.Quit();
                 }
@@ -404,23 +404,8 @@ namespace Generator_V3
                     //
                     //Колонтикулы
                     //
-                    object replace5 = 2;
-                    object tm = Type.Missing;
-                    //object WH = Word.WdHeaderFooterIndex;
-                    string strReplaceWithText = "Экз №1";
-                    object findText = "Экз"; // что меняем
-                    object replaceWith = strReplaceWithText; // на что меняем
-
-                    app.ActiveDocument.Sections[1].Headers[Word.WdHeaderFooterIndex.wdHeaderFooterPrimary].Range.Find.Execute(ref findText,
-                        ref tm, ref tm, ref tm, ref tm, ref tm, ref tm, ref tm, ref tm, ref replaceWith,
-                        ref replace5, ref tm, ref tm, ref tm, ref tm);
-                    app.ActiveDocument.Sections[1].Headers[Word.WdHeaderFooterIndex.wdHeaderFooterFirstPage].Range.Find.Execute(ref findText,
-                        ref tm, ref tm, ref tm, ref tm, ref tm, ref tm, ref tm,ref tm, ref replaceWith,
-                        ref replace5, ref tm, ref tm, ref tm, ref tm);                
-
-                    
-
-                    //app.ActiveDocument.Sections[1].Headers[Word.WdHeaderFooterIndex.wdHeaderFooterPrimary].Range.Text = strReplaceWithText;
+                    object replace = Word.WdReplace.wdReplaceAll;
+                    Object wrap = Word.WdFindWrap.wdFindContinue;
                     //
                     //Срост данных таблицы и шаблона документа Word
                     //
@@ -433,29 +418,15 @@ namespace Generator_V3
                             Word.Find find1 = app.Selection.Find;
                             find1.Text = "{$" + (string)list[index] + "$}";
                             find1.Replacement.Text = dataGridView1.Rows[m].Cells[(string)list[index]].Value.ToString();
-                            Object wrap = Word.WdFindWrap.wdFindContinue;
-                            Object replace = Word.WdReplace.wdReplaceAll;
-
                             find1.Execute(FindText: Type.Missing,
-                                MatchCase: false,
-                                MatchWholeWord: false,
-                                MatchWildcards: false,
-                                MatchSoundsLike: missing,
-                                MatchAllWordForms: false,
-                                Forward: true,
                                 Wrap: wrap,
-                                Format: false,
                                 ReplaceWith: missing, Replace: replace);
 
                             object findText2 = "{$" + (string)list[index] + "$}"; // что меняем
                             object replaceWith2 = dataGridView1.Rows[m].Cells[(string)list[index]].Value.ToString(); // на что меняем
 
-                            app.ActiveDocument.Sections[1].Footers[Word.WdHeaderFooterIndex.wdHeaderFooterPrimary].Range.Find.Execute(ref findText2,
-                                ref tm, ref tm, ref tm, ref tm, ref tm, ref tm, ref tm, ref tm, ref replaceWith2,
-                                ref replace5, ref tm, ref tm, ref tm, ref tm);
-                            app.ActiveDocument.Sections[1].Footers[Word.WdHeaderFooterIndex.wdHeaderFooterFirstPage].Range.Find.Execute(ref findText2,
-                                ref tm, ref tm, ref tm, ref tm, ref tm, ref tm, ref tm, ref tm, ref replaceWith2,
-                                ref replace5, ref tm, ref tm, ref tm, ref tm);
+                            app.ActiveDocument.Sections[1].Footers[Word.WdHeaderFooterIndex.wdHeaderFooterPrimary].Range.Find.Execute(FindText: findText2, ReplaceWith: replaceWith2, Replace: replace);
+                            app.ActiveDocument.Sections[1].Footers[Word.WdHeaderFooterIndex.wdHeaderFooterFirstPage].Range.Find.Execute(FindText: findText2, ReplaceWith: replaceWith2, Replace: replace);
                         }
                     }
 
@@ -481,21 +452,11 @@ namespace Generator_V3
                                 else if (a == SizeArraySpisok)
                                 {
                                     find2.Replacement.Text = (string)spisok[a];
-                                }
-
-                                Object wrap2 = Word.WdFindWrap.wdFindContinue;
-                                Object replace2 = Word.WdReplace.wdReplaceAll;
+                                }                                
                                 find2.MatchPhrase = false;
                                 find2.Execute(FindText: Type.Missing,
-                                    MatchCase: false,
-                                    MatchWholeWord: false,
-                                    MatchWildcards: false,
-                                    MatchSoundsLike: missing,
-                                    MatchAllWordForms: false,
-                                    Forward: true,
-                                    Wrap: wrap2,
-                                    Format: false,
-                                    ReplaceWith: missing, Replace: replace2);
+                                    Wrap: wrap,
+                                    ReplaceWith: missing, Replace: replace);
                             }
                         }
                     }
@@ -512,10 +473,27 @@ namespace Generator_V3
                     app.ActiveDocument.AcceptAllRevisions();
 
                     if (((int)numericUpDown1.Value == 1) == true)
+                    {
+                        object findText = "Экз"; // что меняем
+                        object replaceWith = "Экз. №1"; // на что меняем
+                        app.ActiveDocument.Sections[1].Headers[Word.WdHeaderFooterIndex.wdHeaderFooterPrimary].Range.Find.Execute(FindText: findText, ReplaceWith: replaceWith, Replace: replace);
+                        app.ActiveDocument.Sections[1].Headers[Word.WdHeaderFooterIndex.wdHeaderFooterFirstPage].Range.Find.Execute(FindText: findText, ReplaceWith: replaceWith, Replace: replace);
                         app.ActiveDocument.SaveAs2(ref fileNameEkz1Docx);
+                    }    
+
+                        
                     if (((int)numericUpDown1.Value == 2) == true)
                     {
+                        object findText = "Экз"; // что меняем
+                        object replaceWith = "Экз. №1"; // на что меняем
+                        app.ActiveDocument.Sections[1].Headers[Word.WdHeaderFooterIndex.wdHeaderFooterPrimary].Range.Find.Execute(FindText: findText, ReplaceWith: replaceWith, Replace: replace);
+                        app.ActiveDocument.Sections[1].Headers[Word.WdHeaderFooterIndex.wdHeaderFooterFirstPage].Range.Find.Execute(FindText: findText, ReplaceWith: replaceWith, Replace: replace);
                         app.ActiveDocument.SaveAs2(ref fileNameEkz1Docx);
+
+                        object findText2 = "Экз. №1"; // что меняем
+                        object replaceWith2 = "Экз. №2"; // на что меняем
+                        app.ActiveDocument.Sections[1].Headers[Word.WdHeaderFooterIndex.wdHeaderFooterPrimary].Range.Find.Execute(FindText: findText2, ReplaceWith: replaceWith2, Replace: replace);
+                        app.ActiveDocument.Sections[1].Headers[Word.WdHeaderFooterIndex.wdHeaderFooterFirstPage].Range.Find.Execute(FindText: findText2, ReplaceWith: replaceWith2, Replace: replace);
                         app.ActiveDocument.SaveAs2(ref fileNameEkz2Docx);
                     }
 
