@@ -1,8 +1,11 @@
 ﻿using ExcelDataReader;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Data;
 using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using Word = Microsoft.Office.Interop.Word;
 
@@ -14,9 +17,26 @@ namespace Generator_V3
         private string filename2 = string.Empty;//Путь к файлу Word        
         public DataTableCollection tableCollection = null;
 
+
+
         public Generator()
         {
             InitializeComponent();
+        }
+        private Task ProcessData(List<string> list, IProgress<ProgressReport> progress)
+        {
+            int indexProgress = 1;
+            int TotalProgress = list.Count;
+            var ProgressReport = new ProgressReport();
+            return Task.Run(() =>
+            {
+                for (int i = 0; i < TotalProgress; i++)
+                {
+                    ProgressReport.PercentComplete = indexProgress++ * 100 / TotalProgress;
+                    progress.Report(ProgressReport);
+                    Thread.Sleep(10);
+                }
+            });
         }
 
         void GenerationButtonCheked(object sender, EventArgs e)//Включение кнопки Генерация если 3 поля заполнены
@@ -140,45 +160,6 @@ namespace Generator_V3
                         checkedListBox2.Items.Add("Таблица " + i + " " + app.ActiveDocument.Tables[i].Title);
                     }
 
-                    // Получение текста из нижних и верхних колонтитулов
-                    //foreach (Word.Section section in app.ActiveDocument.Sections)
-                    //{
-                    //    // Нижние колонтитулы
-                    //    foreach (Word.HeaderFooter footer in section.Footers)
-                    //    {
-                    //        string FooterText = (footer.Range == null || footer.Range.Text.Replace("\r", "").Trim() == null) ? null : footer.Range.Text.Replace("\r", "").Trim();
-                    //        if (FooterText != null)
-                    //        {
-                    //            if (FooterText != "")
-                    //            {
-                    //                checkedListBox2.Items.Add(FooterText);
-                    //                string proba = (FooterText.Substring(FooterText.IndexOf("{")));
-                    //                checkedListBox2.Items.Add(proba);
-                    //            }
-
-                    //            /* Обработка текста */
-                    //        }
-                    //        //checkedListBox2.Items.Add(FooterText);
-                    //    }
-
-                    //    // Верхние колонтитулы
-                    //    ArrayList HeaderList = new ArrayList();
-
-                    //    foreach (Word.HeaderFooter header in section.Headers)
-                    //    {
-                    //        string HeaderText = (header.Range == null || header.Range.Text.Replace("\r", "").Trim() == null) ? null : header.Range.Text.Replace("\r", "").Trim();
-                    //        if (HeaderText != null)
-                    //        {
-                    //            //if (HeaderText != "")
-                    //            //{
-                    //            //    checkedListBox2.Items.Add(HeaderText);
-                    //            //}
-                    //            //string proba = (HeaderText.Substring(HeaderText.IndexOf("$"), HeaderText.IndexOf("$")));                             
-
-                    //            /* Обработка текста */
-                    //        }
-                    //    }
-                    //}
                     app.Documents.Close();
                     app.Quit();
                 }
@@ -287,18 +268,21 @@ namespace Generator_V3
             //Получение количества столбцов и строк для внесение имен переменных
             //и использовании индексов в дальнейшем
             //
-            int NumberOfColumnsDGV1 = dataGridView1.Columns.GetColumnCount(0);
-            int LastRowIndexDGV1 = dataGridView1.Rows.GetLastRow(0);
+            int CountColumnsDGV1 = dataGridView1.Columns.GetColumnCount(0);
+            int CountRowDGV1 = dataGridView1.Rows.GetLastRow(0);
 
-            int NumberOfColumnsDGV2 = dataGridView2.Columns.GetColumnCount(0);
-            int LastRowIndexDGV2 = dataGridView2.Rows.GetLastRow(0);
+            int CountColumnsDGV2 = dataGridView2.Columns.GetColumnCount(0);
+            int CountRowDGV2 = dataGridView2.Rows.GetLastRow(0);
+            int Count = 0;
+
+            ProgressBar.Maximum = CountRowDGV1;
 
             Word.Application app = new Word.Application();
 
             //Переменная содержит путь куда складывать готовые файлы
             string PathFolder = textBoxSelectPathSave.Text;
 
-            //Создаём новую папку и помещаем всё файлы в эту папку
+            //Создаём новую папку
             string path = textBoxSelectPathSave.Text + "\\" + "Новая папка проекта";
             if (!Directory.Exists(path))
             {
@@ -307,7 +291,7 @@ namespace Generator_V3
 
             try
             {
-                for (int m = 0; m < LastRowIndexDGV1; m++)
+                for (int m = 0; m < CountRowDGV1; m++)
                 {
                     //Создаём переменную, которая указывает с какого столбца брать имена для файлов,
                     //далее загоняем переменную в цикл
@@ -316,13 +300,13 @@ namespace Generator_V3
                     /*Создаём листы в которых будут храниться имена всех столбцов (наименования переменных)
                     в нашем случае мы выбрали HeaderText в dataGridView1 */
                     ArrayList list = new ArrayList();
-                    for (int i = 0; i < NumberOfColumnsDGV1; i++)
+                    for (int i = 0; i < CountColumnsDGV1; i++)
                     {
                         list.Add(dataGridView1.Columns[i].HeaderText.ToString());
                     }
 
                     ArrayList list2 = new ArrayList();
-                    for (int i = 0; i < NumberOfColumnsDGV2; i++)
+                    for (int i = 0; i < CountColumnsDGV2; i++)
                     {
                         list2.Add(dataGridView2.Columns[i].HeaderText.ToString());
                     }
@@ -400,46 +384,43 @@ namespace Generator_V3
                         }
 
                     }
-
-                    //
-                    //Колонтикулы
-                    //
-                    object replace = Word.WdReplace.wdReplaceAll;
-                    Object wrap = Word.WdFindWrap.wdFindContinue;
                     //
                     //Срост данных таблицы и шаблона документа Word
                     //
+                    object replace = Word.WdReplace.wdReplaceAll;
+                    Object wrap = Word.WdFindWrap.wdFindContinue;
+                    Word.Find find = app.Selection.Find;
+                    object fileformat = Word.WdSaveFormat.wdFormatPDF;
+                    int SectionCount = app.ActiveDocument.Sections.Count;
                     //
-                    //Блок 1 поиск и замена одиночных переменных
+                    //Блок 1 поиск и замена одиночных переменных по документу и колонтитулам
                     //
                     {
-                        for (int index = 0; index < NumberOfColumnsDGV1; index++)
+                        for (int index = 0; index < CountColumnsDGV1; index++)
                         {
-                            Word.Find find1 = app.Selection.Find;
-                            find1.Text = "{$" + (string)list[index] + "$}";
-                            find1.Replacement.Text = dataGridView1.Rows[m].Cells[(string)list[index]].Value.ToString();
-                            find1.Execute(FindText: Type.Missing,
-                                Wrap: wrap,
-                                ReplaceWith: missing, Replace: replace);
+                            find.Text = "{$" + (string)list[index] + "$}";// что меняем
+                            find.Replacement.Text = dataGridView1.Rows[m].Cells[(string)list[index]].Value.ToString();// на что меняем
+                            find.Execute(FindText: Type.Missing, Wrap: wrap, ReplaceWith: missing, Replace: replace);
 
-                            object findText2 = "{$" + (string)list[index] + "$}"; // что меняем
-                            object replaceWith2 = dataGridView1.Rows[m].Cells[(string)list[index]].Value.ToString(); // на что меняем
-
-                            app.ActiveDocument.Sections[1].Footers[Word.WdHeaderFooterIndex.wdHeaderFooterPrimary].Range.Find.Execute(FindText: findText2, ReplaceWith: replaceWith2, Replace: replace);
-                            app.ActiveDocument.Sections[1].Footers[Word.WdHeaderFooterIndex.wdHeaderFooterFirstPage].Range.Find.Execute(FindText: findText2, ReplaceWith: replaceWith2, Replace: replace);
+                            object FindTextFooter = "{$" + (string)list[index] + "$}"; // что меняем
+                            object ReplaceWithFooter = dataGridView1.Rows[m].Cells[(string)list[index]].Value.ToString(); // на что меняем
+                            for (int i = 1; i <= SectionCount; i++)
+                            {
+                                app.ActiveDocument.Sections[i].Footers[Word.WdHeaderFooterIndex.wdHeaderFooterPrimary].Range.Find.Execute(FindText: FindTextFooter, ReplaceWith: ReplaceWithFooter, Replace: replace);
+                                app.ActiveDocument.Sections[i].Footers[Word.WdHeaderFooterIndex.wdHeaderFooterFirstPage].Range.Find.Execute(FindText: FindTextFooter, ReplaceWith: ReplaceWithFooter, Replace: replace);
+                                app.ActiveDocument.Sections[i].Footers[Word.WdHeaderFooterIndex.wdHeaderFooterEvenPages].Range.Find.Execute(FindText: FindTextFooter, ReplaceWith: ReplaceWithFooter, Replace: replace);
+                            }
                         }
                     }
-
                     //
-                    //Блок 2 Поиск и замена списочных переменных
+                    //Блок 2 Поиск и замена списочных переменных по документу
                     //
                     {
-                        for (int index = 0; index < NumberOfColumnsDGV2; index++)
+                        for (int index = 0; index < CountColumnsDGV2; index++)
                         {
-                            Word.Find find2 = app.Selection.Find;
-                            find2.Text = "[$" + (string)list2[index] + "$]";
+                            find.Text = "[$" + (string)list2[index] + "$]";// что меняем
                             ArrayList spisok = new ArrayList();
-                            for (int i = 0; i < LastRowIndexDGV2; i++)
+                            for (int i = 0; i < CountRowDGV2; i++)
                             {
                                 if (dataGridView2.Rows[i].Cells[index].Value.ToString() != "")
                                     spisok.Add(dataGridView2.Rows[i].Cells[index].Value.ToString());
@@ -448,15 +429,12 @@ namespace Generator_V3
                             for (int a = 0; a <= SizeArraySpisok; a++)
                             {
                                 if (a < SizeArraySpisok)
-                                    find2.Replacement.Text = (string)spisok[a] + "^p" + "[$" + (string)list2[index] + "$]";
+                                    find.Replacement.Text = (string)spisok[a] + "^p" + "[$" + (string)list2[index] + "$]";// на что меняем
                                 else if (a == SizeArraySpisok)
                                 {
-                                    find2.Replacement.Text = (string)spisok[a];
-                                }                                
-                                find2.MatchPhrase = false;
-                                find2.Execute(FindText: Type.Missing,
-                                    Wrap: wrap,
-                                    ReplaceWith: missing, Replace: replace);
+                                    find.Replacement.Text = (string)spisok[a];
+                                }
+                                find.Execute(FindText: Type.Missing, Wrap: wrap, ReplaceWith: missing, Replace: replace);
                             }
                         }
                     }
@@ -466,52 +444,85 @@ namespace Generator_V3
                     {
                         app.Application.ActiveDocument.DeleteAllComments();
                     }
-                    //
-                    //Сохранение в выбранном формате
-                    //
-                    object fileformat = Word.WdSaveFormat.wdFormatPDF;
                     app.ActiveDocument.AcceptAllRevisions();
 
-                    if (((int)numericUpDown1.Value == 1) == true)
-                    {
-                        object findText = "Экз"; // что меняем
-                        object replaceWith = "Экз. №1"; // на что меняем
-                        app.ActiveDocument.Sections[1].Headers[Word.WdHeaderFooterIndex.wdHeaderFooterPrimary].Range.Find.Execute(FindText: findText, ReplaceWith: replaceWith, Replace: replace);
-                        app.ActiveDocument.Sections[1].Headers[Word.WdHeaderFooterIndex.wdHeaderFooterFirstPage].Range.Find.Execute(FindText: findText, ReplaceWith: replaceWith, Replace: replace);
-                        app.ActiveDocument.SaveAs2(ref fileNameEkz1Docx);
-                    }    
 
-                        
-                    if (((int)numericUpDown1.Value == 2) == true)
+                    //
+                    //Сохранение в выбранном формате и количестве экземпляров с установкой номера экземпляра в колонтитуле
+                    //
+                    if (((int)numericUpDown1.Value == 1) == true)// Если один экземпляр
                     {
-                        object findText = "Экз"; // что меняем
-                        object replaceWith = "Экз. №1"; // на что меняем
-                        app.ActiveDocument.Sections[1].Headers[Word.WdHeaderFooterIndex.wdHeaderFooterPrimary].Range.Find.Execute(FindText: findText, ReplaceWith: replaceWith, Replace: replace);
-                        app.ActiveDocument.Sections[1].Headers[Word.WdHeaderFooterIndex.wdHeaderFooterFirstPage].Range.Find.Execute(FindText: findText, ReplaceWith: replaceWith, Replace: replace);
+                        object FindTextHeaders = "Экз"; // что меняем
+                        object ReplaceWithHeaders = "Экз. №1"; // на что меняем
+
+                        for (int i = 1; i <= SectionCount; i++)
+                        {
+                            app.ActiveDocument.Sections[i].Headers[Word.WdHeaderFooterIndex.wdHeaderFooterPrimary].Range.Find.Execute
+                                (FindText: FindTextHeaders, ReplaceWith: ReplaceWithHeaders, Replace: replace);
+                            app.ActiveDocument.Sections[i].Headers[Word.WdHeaderFooterIndex.wdHeaderFooterFirstPage].Range.Find.Execute
+                                (FindText: FindTextHeaders, ReplaceWith: ReplaceWithHeaders, Replace: replace);
+                            app.ActiveDocument.Sections[i].Headers[Word.WdHeaderFooterIndex.wdHeaderFooterEvenPages].Range.Find.Execute
+                                (FindText: FindTextHeaders, ReplaceWith: ReplaceWithHeaders, Replace: replace);
+                        }
                         app.ActiveDocument.SaveAs2(ref fileNameEkz1Docx);
 
-                        object findText2 = "Экз. №1"; // что меняем
-                        object replaceWith2 = "Экз. №2"; // на что меняем
-                        app.ActiveDocument.Sections[1].Headers[Word.WdHeaderFooterIndex.wdHeaderFooterPrimary].Range.Find.Execute(FindText: findText2, ReplaceWith: replaceWith2, Replace: replace);
-                        app.ActiveDocument.Sections[1].Headers[Word.WdHeaderFooterIndex.wdHeaderFooterFirstPage].Range.Find.Execute(FindText: findText2, ReplaceWith: replaceWith2, Replace: replace);
-                        app.ActiveDocument.SaveAs2(ref fileNameEkz2Docx);
+                        if (CheckBoxSaveToPdf.Checked == true)
+                            app.ActiveDocument.SaveAs2(ref fileNameEkz1Pdf, fileformat);//Сохроняем в формате PDF
+
+                        Count++;
+                        ProgressBar.Value = Count;
+                        ProgressBar.Update();
                     }
 
-                    if (CheckBoxSaveToPdf.Checked)
+                    if (((int)numericUpDown1.Value == 2) == true)// Если два экземпляра
                     {
-                        if (((int)numericUpDown1.Value == 1) == true)
-                            app.ActiveDocument.SaveAs2(ref fileNameEkz1Pdf, fileformat);
-                        if (((int)numericUpDown1.Value == 2) == true)
+                        object FindTextHeaders = "Экз"; // что меняем
+                        object ReplaceWithHeaders = "Экз. №1"; // на что меняем
+                        for (int i = 1; i <= SectionCount; i++)
                         {
-                            app.ActiveDocument.SaveAs2(ref fileNameEkz1Pdf, fileformat);
-                            app.ActiveDocument.SaveAs2(ref fileNameEkz2Pdf, fileformat);
+                            app.ActiveDocument.Sections[i].Headers[Word.WdHeaderFooterIndex.wdHeaderFooterPrimary].Range.Find.Execute
+                            (FindText: FindTextHeaders, ReplaceWith: ReplaceWithHeaders, Replace: replace);
+
+                            app.ActiveDocument.Sections[i].Headers[Word.WdHeaderFooterIndex.wdHeaderFooterFirstPage].Range.Find.Execute
+                                (FindText: FindTextHeaders, ReplaceWith: ReplaceWithHeaders, Replace: replace);
+
+                            app.ActiveDocument.Sections[i].Headers[Word.WdHeaderFooterIndex.wdHeaderFooterEvenPages].Range.Find.Execute
+                                (FindText: FindTextHeaders, ReplaceWith: ReplaceWithHeaders, Replace: replace);
                         }
+
+                        app.ActiveDocument.SaveAs2(ref fileNameEkz1Docx);
+
+                        if (CheckBoxSaveToPdf.Checked == true)
+                            app.ActiveDocument.SaveAs2(ref fileNameEkz1Pdf, fileformat);//Сохроняем в формате PDF
+
+                        object FindTextHeaders2 = "Экз. №1"; // что меняем
+                        object ReplaceWithHeaders2 = "Экз. №2"; // на что меняем
+
+                        for (int i = 1; i <= SectionCount; i++)
+                        {
+                            app.ActiveDocument.Sections[i].Headers[Word.WdHeaderFooterIndex.wdHeaderFooterPrimary].Range.Find.Execute
+                            (FindText: FindTextHeaders2, ReplaceWith: ReplaceWithHeaders2, Replace: replace);
+
+                            app.ActiveDocument.Sections[i].Headers[Word.WdHeaderFooterIndex.wdHeaderFooterFirstPage].Range.Find.Execute
+                                (FindText: FindTextHeaders2, ReplaceWith: ReplaceWithHeaders2, Replace: replace);
+
+                            app.ActiveDocument.Sections[i].Headers[Word.WdHeaderFooterIndex.wdHeaderFooterEvenPages].Range.Find.Execute
+                                (FindText: FindTextHeaders2, ReplaceWith: ReplaceWithHeaders2, Replace: replace);
+                        }
+
+                        app.ActiveDocument.SaveAs2(ref fileNameEkz2Docx);
+                        if (CheckBoxSaveToPdf.Checked)
+                            app.ActiveDocument.SaveAs2(ref fileNameEkz2Pdf, fileformat);//Сохроняем в формате PDF
+                        Count++;
+                        ProgressBar.Value = Count;
+                        ProgressBar.Update();
 
                     }
 
                 }
 
                 MessageBox.Show("Готовые Файлы находятся " + PathFolder);
+                ProgressBar.Value = 0;
             }
             catch (Exception ex)
             {
@@ -528,6 +539,5 @@ namespace Generator_V3
         {
             Application.Exit();
         }
-
     }
 }

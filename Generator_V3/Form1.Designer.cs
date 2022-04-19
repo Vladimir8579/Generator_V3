@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.Generation = new System.Windows.Forms.Button();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.openFileDialog2 = new System.Windows.Forms.OpenFileDialog();
@@ -64,6 +65,10 @@
             this.label7 = new System.Windows.Forms.Label();
             this.SelectPathSave = new System.Windows.Forms.Button();
             this.textBoxSelectPathSave = new System.Windows.Forms.TextBox();
+            this.ProgressBar = new System.Windows.Forms.ProgressBar();
+            this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.LblStatus = new System.Windows.Forms.Label();
             this.PanelWord.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
@@ -72,6 +77,8 @@
             this.toolStrip1.SuspendLayout();
             this.PanelPatchSave.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
+            this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // Generation
@@ -535,11 +542,49 @@
             this.textBoxSelectPathSave.TextChanged += new System.EventHandler(this.GenerationButtonCheked);
             this.textBoxSelectPathSave.DoubleClick += new System.EventHandler(this.SelectPathSave_Click);
             // 
+            // ProgressBar
+            // 
+            this.ProgressBar.Location = new System.Drawing.Point(1, 27);
+            this.ProgressBar.MaximumSize = new System.Drawing.Size(480, 17);
+            this.ProgressBar.MinimumSize = new System.Drawing.Size(480, 17);
+            this.ProgressBar.Name = "ProgressBar";
+            this.ProgressBar.Size = new System.Drawing.Size(480, 17);
+            this.ProgressBar.TabIndex = 38;
+            // 
+            // errorProvider1
+            // 
+            this.errorProvider1.ContainerControl = this;
+            // 
+            // panel1
+            // 
+            this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel1.Controls.Add(this.LblStatus);
+            this.panel1.Controls.Add(this.ProgressBar);
+            this.panel1.Location = new System.Drawing.Point(175, 627);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(485, 50);
+            this.panel1.TabIndex = 39;
+            // 
+            // LblStatus
+            // 
+            this.LblStatus.AutoSize = true;
+            this.LblStatus.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.LblStatus.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.LblStatus.Location = new System.Drawing.Point(1, 3);
+            this.LblStatus.MaximumSize = new System.Drawing.Size(480, 18);
+            this.LblStatus.MinimumSize = new System.Drawing.Size(480, 18);
+            this.LblStatus.Name = "LblStatus";
+            this.LblStatus.Size = new System.Drawing.Size(480, 18);
+            this.LblStatus.TabIndex = 39;
+            this.LblStatus.Text = "Processing....0%";
+            this.LblStatus.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            // 
             // Generator
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(835, 683);
+            this.Controls.Add(this.panel1);
             this.Controls.Add(this.PanelPatchSave);
             this.Controls.Add(this.PanelExcel);
             this.Controls.Add(this.PanelWord);
@@ -563,6 +608,9 @@
             this.PanelPatchSave.ResumeLayout(false);
             this.PanelPatchSave.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).EndInit();
+            this.panel1.ResumeLayout(false);
+            this.panel1.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -604,6 +652,10 @@
         private System.Windows.Forms.Button SelectPathSave;
         private System.Windows.Forms.TextBox textBoxSelectPathSave;
         private System.Windows.Forms.CheckBox CheckBoxSaveToPdf;
+        private System.Windows.Forms.ProgressBar ProgressBar;
+        private System.Windows.Forms.ErrorProvider errorProvider1;
+        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Label LblStatus;
     }
 }
 
