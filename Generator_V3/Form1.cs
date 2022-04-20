@@ -17,8 +17,6 @@ namespace Generator_V3
         private string filename2 = string.Empty;//Путь к файлу Word        
         public DataTableCollection tableCollection = null;
 
-
-
         public Generator()
         {
             InitializeComponent();
@@ -139,8 +137,6 @@ namespace Generator_V3
                     checkedListBox2.Items.Clear();
                     for (int i = 1; i <= TableNumber; i++)
                     {
-                        //checkedListBox2.Items.Add(app.ActiveDocument.Tables[i].Title + i);
-                        //if (app.ActiveDocument.Tables[i].Title != null)
                         checkedListBox2.Items.Add("Таблица " + i + " " + app.ActiveDocument.Tables[i].Title);
                     }
 
