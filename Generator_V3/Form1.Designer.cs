@@ -576,7 +576,7 @@
             this.LblStatus.Name = "LblStatus";
             this.LblStatus.Size = new System.Drawing.Size(480, 18);
             this.LblStatus.TabIndex = 39;
-            this.LblStatus.Text = "Processing....0%";
+            this.LblStatus.Text = "Processing....";
             this.LblStatus.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
             // Generator

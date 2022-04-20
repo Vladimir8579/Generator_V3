@@ -23,21 +23,6 @@ namespace Generator_V3
         {
             InitializeComponent();
         }
-        private Task ProcessData(List<string> list, IProgress<ProgressReport> progress)
-        {
-            int indexProgress = 1;
-            int TotalProgress = list.Count;
-            var ProgressReport = new ProgressReport();
-            return Task.Run(() =>
-            {
-                for (int i = 0; i < TotalProgress; i++)
-                {
-                    ProgressReport.PercentComplete = indexProgress++ * 100 / TotalProgress;
-                    progress.Report(ProgressReport);
-                    Thread.Sleep(10);
-                }
-            });
-        }
 
         void GenerationButtonCheked(object sender, EventArgs e)//Включение кнопки Генерация если 3 поля заполнены
         {
@@ -137,7 +122,6 @@ namespace Generator_V3
                     };
                     Object missing = Type.Missing;
                     app.Documents.Open(filename2);
-
                     //
                     //Получение имени закладки и создание соответствующе именованых чекбоксов
                     //
@@ -213,10 +197,10 @@ namespace Generator_V3
                 for (int l = 0; l < NumberOfColumn; l++)
                 {
                     comboBox1.Items.Add(dataGridView1.Columns[l].HeaderText.ToString());
-                    //comboBox1.Items.Add(tbl.Columns[l].ColumnName.ToString());
                 }
 
                 comboBox1.SelectedIndex = 0;
+                LblStatus.Text = "Будет создано " + dataGridView1.Rows.GetLastRow(0).ToString() + " комплект(a)(ов) документов";
             }
 
             catch (Exception ex)
@@ -273,21 +257,18 @@ namespace Generator_V3
 
             int CountColumnsDGV2 = dataGridView2.Columns.GetColumnCount(0);
             int CountRowDGV2 = dataGridView2.Rows.GetLastRow(0);
-            int Count = 0;
-
-            ProgressBar.Maximum = CountRowDGV1;
-
+            //
+            //Инициализация переменной для счётчика итераций
+            //
+            int Counter = 0;
+            //
+            //
+            //
+            ProgressBar.Maximum = dataGridView1.Rows.GetLastRow(0);
             Word.Application app = new Word.Application();
 
             //Переменная содержит путь куда складывать готовые файлы
-            string PathFolder = textBoxSelectPathSave.Text;
-
-            //Создаём новую папку
-            string path = textBoxSelectPathSave.Text + "\\" + "Новая папка проекта";
-            if (!Directory.Exists(path))
-            {
-                Directory.CreateDirectory(path);
-            }
+            string PathFolder = textBoxSelectPathSave.Text;           
 
             try
             {
@@ -313,11 +294,11 @@ namespace Generator_V3
                     //
                     //Задаём имя новому файлу
                     //
-                    object fileNameEkz1Docx = path + "\\" + "Экз №1 " + dataGridView1.Rows[m].Cells[IndexSelect].Value.ToString() + ".docx";
-                    object fileNameEkz2Docx = path + "\\" + "Экз №2 " + dataGridView1.Rows[m].Cells[IndexSelect].Value.ToString() + ".docx";
+                    object fileNameEkz1Docx = PathFolder + "\\" + "Экз №1 " + dataGridView1.Rows[m].Cells[IndexSelect].Value.ToString() + ".docx";
+                    object fileNameEkz2Docx = PathFolder + "\\" + "Экз №2 " + dataGridView1.Rows[m].Cells[IndexSelect].Value.ToString() + ".docx";
 
-                    object fileNameEkz1Pdf = path + "\\" + "Экз №1 " + dataGridView1.Rows[m].Cells[IndexSelect].Value.ToString() + ".pdf";
-                    object fileNameEkz2Pdf = path + "\\" + "Экз №2 " + dataGridView1.Rows[m].Cells[IndexSelect].Value.ToString() + ".pdf";
+                    object fileNameEkz1Pdf = PathFolder + "\\" + "Экз №1 " + dataGridView1.Rows[m].Cells[IndexSelect].Value.ToString() + ".pdf";
+                    object fileNameEkz2Pdf = PathFolder + "\\" + "Экз №2 " + dataGridView1.Rows[m].Cells[IndexSelect].Value.ToString() + ".pdf";
 
                     object oMissing = System.Reflection.Missing.Value;
                     object oEndOfDoc = "\\endofdoc"; /* \endofdoc это предопределенная закладка */
@@ -331,7 +312,6 @@ namespace Generator_V3
                     //
                     //Удаление не отмеченных закладок
                     //
-
                     for (int i = 0; i < checkedListBox1.Items.Count; i++)
                     {
                         string BookmarkName = checkedListBox1.Items[i].ToString();
@@ -340,7 +320,6 @@ namespace Generator_V3
                             app.ActiveDocument.Bookmarks[BookmarkName].Range.Delete();
                         }
                     }
-
                     //
                     //Получаем номер таблицы отмеченную в checkedListBox2,
                     //которую нужно почистить от пустых строк и прроверяем построчно ячейки 2, 3, 4
@@ -445,8 +424,6 @@ namespace Generator_V3
                         app.Application.ActiveDocument.DeleteAllComments();
                     }
                     app.ActiveDocument.AcceptAllRevisions();
-
-
                     //
                     //Сохранение в выбранном формате и количестве экземпляров с установкой номера экземпляра в колонтитуле
                     //
@@ -469,9 +446,10 @@ namespace Generator_V3
                         if (CheckBoxSaveToPdf.Checked == true)
                             app.ActiveDocument.SaveAs2(ref fileNameEkz1Pdf, fileformat);//Сохроняем в формате PDF
 
-                        Count++;
-                        ProgressBar.Value = Count;
+                        Counter++;
+                        ProgressBar.Value = Counter;
                         ProgressBar.Update();
+                        LblStatus.Text = "Выполнено " + Counter + " из" + CountRowDGV1;
                     }
 
                     if (((int)numericUpDown1.Value == 2) == true)// Если два экземпляра
@@ -513,16 +491,17 @@ namespace Generator_V3
                         app.ActiveDocument.SaveAs2(ref fileNameEkz2Docx);
                         if (CheckBoxSaveToPdf.Checked)
                             app.ActiveDocument.SaveAs2(ref fileNameEkz2Pdf, fileformat);//Сохроняем в формате PDF
-                        Count++;
-                        ProgressBar.Value = Count;
+                        Counter++;
+                        ProgressBar.Value = Counter;
                         ProgressBar.Update();
-
+                        LblStatus.Text = "Выполнено " + Counter + " из" + CountRowDGV1;
                     }
-
                 }
 
                 MessageBox.Show("Готовые Файлы находятся " + PathFolder);
                 ProgressBar.Value = 0;
+                LblStatus.Text = "Processing....";
+
             }
             catch (Exception ex)
             {
