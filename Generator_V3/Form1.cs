@@ -1,11 +1,8 @@
 ﻿using ExcelDataReader;
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Data;
 using System.IO;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using Word = Microsoft.Office.Interop.Word;
 
@@ -99,10 +96,6 @@ namespace Generator_V3
                 MessageBox.Show(ex.Message, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
-            finally
-            {
-
-            }
         }
 
         private void SelectWord_Click(object sender, EventArgs e)//Выбрать и прочитать шаблон Word
@@ -121,7 +114,7 @@ namespace Generator_V3
                     Object missing = Type.Missing;
                     app.Documents.Open(filename2);
                     //
-                    //Получение имени закладки и создание соответствующе именованых чекбоксов
+                    //Получение имени закладки и создание соответствующе именованных чекбоксов
                     //
                     int NumberBookmarksEnd = app.ActiveDocument.Bookmarks.Count;
                     checkedListBox1.Items.Clear();
@@ -193,6 +186,7 @@ namespace Generator_V3
                 for (int l = 0; l < NumberOfColumn; l++)
                 {
                     comboBox1.Items.Add(dataGridView1.Columns[l].HeaderText.ToString());
+                    //comboBox1.Items.Add(tbl.Columns[l].ColumnName);                   
                 }
 
                 comboBox1.SelectedIndex = 0;
@@ -264,7 +258,7 @@ namespace Generator_V3
             Word.Application app = new Word.Application();
 
             //Переменная содержит путь куда складывать готовые файлы
-            string PathFolder = textBoxSelectPathSave.Text;           
+            string PathFolder = textBoxSelectPathSave.Text;
 
             try
             {
@@ -274,7 +268,7 @@ namespace Generator_V3
                     //далее загоняем переменную в цикл
                     int IndexSelect = comboBox1.SelectedIndex;
 
-                    /*Создаём листы в которых будут храниться имена всех столбцов (наименования переменных)
+                    /*Создаём листы в которых будут храниться имена всех столбцов (наименование переменных)
                     в нашем случае мы выбрали HeaderText в dataGridView1 */
                     ArrayList list = new ArrayList();
                     for (int i = 0; i < CountColumnsDGV1; i++)
@@ -289,7 +283,7 @@ namespace Generator_V3
                     }
                     //
                     //Задаём имя новому файлу
-                    //
+                    //                    
                     object fileNameEkz1Docx = PathFolder + "\\" + "Экз №1 " + dataGridView1.Rows[m].Cells[IndexSelect].Value.ToString() + ".docx";
                     object fileNameEkz2Docx = PathFolder + "\\" + "Экз №2 " + dataGridView1.Rows[m].Cells[IndexSelect].Value.ToString() + ".docx";
 
@@ -304,7 +298,6 @@ namespace Generator_V3
                     string fileName2 = textBox1SelectWord.Text;
                     Object missing = Type.Missing;
                     app.Documents.Open(fileName2);
-
                     //
                     //Удаление не отмеченных закладок
                     //
@@ -317,8 +310,8 @@ namespace Generator_V3
                         }
                     }
                     //
-                    //Получаем номер таблицы отмеченную в checkedListBox2,
-                    //которую нужно почистить от пустых строк и прроверяем построчно ячейки 2, 3, 4
+                    //Получаем номер таблицы в открытом документе WORD и отмеченную в checkedListBox2,
+                    //которую нужно почистить от пустых строк и проверяем построчно ячейки 2, 3, 4
                     // если три ячейки подряд в строке пустые удаляем строку
                     //
                     int NumberCheckTable = checkedListBox2.Items.Count;
@@ -373,11 +366,11 @@ namespace Generator_V3
                     {
                         for (int index = 0; index < CountColumnsDGV1; index++)
                         {
-                            find.Text = "{$" + (string)list[index] + "$}";// что меняем
-                            find.Replacement.Text = dataGridView1.Rows[m].Cells[(string)list[index]].Value.ToString();// на что меняем
+                            find.Text = "{$" + (string)list[index] + "$}";// что меняем переменные в шаблоне
+                            find.Replacement.Text = dataGridView1.Rows[m].Cells[(string)list[index]].Value.ToString();// на что меняем значение переменных из Excel
                             find.Execute(FindText: Type.Missing, Wrap: wrap, ReplaceWith: missing, Replace: replace);
 
-                            object FindTextFooter = "{$" + (string)list[index] + "$}"; // что меняем
+                            object FindTextFooter = "{$" + (string)list[index] + "$}";// что меняем
                             object ReplaceWithFooter = dataGridView1.Rows[m].Cells[(string)list[index]].Value.ToString(); // на что меняем
                             for (int i = 1; i <= SectionCount; i++)
                             {
@@ -432,20 +425,22 @@ namespace Generator_V3
                         {
                             app.ActiveDocument.Sections[i].Headers[Word.WdHeaderFooterIndex.wdHeaderFooterPrimary].Range.Find.Execute
                                 (FindText: FindTextHeaders, ReplaceWith: ReplaceWithHeaders, Replace: replace);
+
                             app.ActiveDocument.Sections[i].Headers[Word.WdHeaderFooterIndex.wdHeaderFooterFirstPage].Range.Find.Execute
                                 (FindText: FindTextHeaders, ReplaceWith: ReplaceWithHeaders, Replace: replace);
+
                             app.ActiveDocument.Sections[i].Headers[Word.WdHeaderFooterIndex.wdHeaderFooterEvenPages].Range.Find.Execute
                                 (FindText: FindTextHeaders, ReplaceWith: ReplaceWithHeaders, Replace: replace);
                         }
                         app.ActiveDocument.SaveAs2(ref fileNameEkz1Docx);
 
-                        if (CheckBoxSaveToPdf.Checked == true)
-                            app.ActiveDocument.SaveAs2(ref fileNameEkz1Pdf, fileformat);//Сохроняем в формате PDF
+                        if (CheckBoxSaveToPdf.Checked)
+                            app.ActiveDocument.SaveAs2(ref fileNameEkz1Pdf, fileformat);//Сохраняем в формате PDF
 
                         Counter++;
                         ProgressBar.Value = Counter;
                         ProgressBar.Update();
-                        LblStatus.Text = "Выполнено " + Counter + " из" + CountRowDGV1;
+                        LblStatus.Text = "Выполнено " + Counter + " из " + CountRowDGV1;
                     }
 
                     if (((int)numericUpDown1.Value == 2) == true)// Если два экземпляра
@@ -466,8 +461,8 @@ namespace Generator_V3
 
                         app.ActiveDocument.SaveAs2(ref fileNameEkz1Docx);
 
-                        if (CheckBoxSaveToPdf.Checked == true)
-                            app.ActiveDocument.SaveAs2(ref fileNameEkz1Pdf, fileformat);//Сохроняем в формате PDF
+                        if (CheckBoxSaveToPdf.Checked)
+                            app.ActiveDocument.SaveAs2(ref fileNameEkz1Pdf, fileformat);//Сохраняем в формате PDF
 
                         object FindTextHeaders2 = "Экз. №1"; // что меняем
                         object ReplaceWithHeaders2 = "Экз. №2"; // на что меняем
@@ -486,15 +481,15 @@ namespace Generator_V3
 
                         app.ActiveDocument.SaveAs2(ref fileNameEkz2Docx);
                         if (CheckBoxSaveToPdf.Checked)
-                            app.ActiveDocument.SaveAs2(ref fileNameEkz2Pdf, fileformat);//Сохроняем в формате PDF
+                            app.ActiveDocument.SaveAs2(ref fileNameEkz2Pdf, fileformat);//Сохраняем в формате PDF
                         Counter++;
                         ProgressBar.Value = Counter;
                         ProgressBar.Update();
-                        LblStatus.Text = "Выполнено " + Counter + " из" + CountRowDGV1;
+                        LblStatus.Text = "Выполнено " + Counter + " из " + CountRowDGV1;
                     }
                 }
 
-                MessageBox.Show("Готовые Файлы находятся " + PathFolder);
+                MessageBox.Show("Готовые файлы находятся " + PathFolder);
                 ProgressBar.Value = 0;
                 LblStatus.Text = "Processing....";
 
